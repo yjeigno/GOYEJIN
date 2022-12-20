@@ -10,9 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
 import java.util.Objects;
-import java.util.Set;
 
 /** 할 일: Lombok 사용하기
  * 주의: maven 때랑 같은 방식인 것들도 이름이 다르게 되어 있으니 헷갈리지 않게 주의!
@@ -38,7 +36,7 @@ import java.util.Set;
 @ToString
 @Entity /* 1) 롬복을 이용해서 클래스를 엔티티로 변경. @Entity가 붙은 클래스는 JPA가 관리하게 된다.
             그래서 기본키(PK)가 뭔지 알려 줘야 한다. 그게 @Id 애너테이션 이다. */
-public class Article {
+public class Ex01_1_Article_엔티티로_변경 {
 
     @Id // 전체 필드 중에서 이게 PK다 라고 말해 주는 거. @Id가 없으면 @Entity 에러 난다.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 해당 필드가 @auto_increment 인 경우 @GeneratedValue 을 써서 자동으로 값이 생성되게 해 줘야 한다.
@@ -62,25 +60,8 @@ public class Article {
 
     @Setter private String hashtag; // 해시태그
 
-    /* 양방향 바인딩
-    *
-    *
-    * */
-    @OrderBy("id") // 양방향 바인딩을 할 건데 정렬 기준을 id로 하겠다는 뜻.
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
-    @ToString.Exclude /** 이거 중요. 맨 위에 @ToString이 있는데 마우스 올려보면 '@ToString includes~ lazy load 어쩌고' 나온다.
-     이건 퍼포먼스, 메모리 저하를 일으킬 수 있어서 성능적으로 안 좋은 영향을 줄 수 있다. 그래서 해당 필드를 가려주세요 하는 거 */
-    private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
-    /* 이건 더 중요: @ToString.Exclude 이걸 안 해 주면 순환참조 이슈가 생길 수 있다.
-                    여기서 ToString 이 id, title, content, hashtag 다 찍고 Set<ArticleComment> 부분을 찍으려고
-                    ArticleComment.java 파일에 가서 거기 있는 @ToString 이 원소들 다 찍으려고 하면서 원소들 중에
-                    private Article article; 을 보는 순간 다시 Article 의 @ToString 이 동작하면서 또 모든 원소들을
-                    찍으려고 하고, 그러다가 다시 Set<ArticleComment>를 보고 또 Article 로 가서 toString 돌리고......
-                    이런식으로 동작하면서 메모리가 터질 수 있다. 그래서 Set<ArticleComment> 에 @ToString.Exclude 을 달아 준다.
+    /* 양방향 바인딩 */
 
-                    ArticleComment 에 걸지 않고 Article 에 걸어 주는 이유는 댓글이 글을 참조하는 건 정상적인 경우인데, 반대로
-                    글이 댓글을 참조하는 건 일반적인 경우는 아니기 때문에 Article 에 Exclude 를 걸어 준다.
-    * */
 
     /* jpa auditing: jpa 에서 자동으로 세팅하게 해줄 때 사용하는 기능
     *               이거 하려면 config 파일이 별도로 있어야 한다.
@@ -115,16 +96,16 @@ public class Article {
     /** Entity 를 만들 때는 무조건 기본 생성자가 필요하다.
      * public 또는 protected 만 가능한데, 평생 아무데서도 기본 생성자를 안 쓰이게 하고 싶어서 protected로 변경함
      */
-    protected Article() { }
+    protected Ex01_1_Article_엔티티로_변경() { }
 
-    private Article(String title, String content, String hashtag) {
+    private Ex01_1_Article_엔티티로_변경(String title, String content, String hashtag) {
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
     }
 
-    public static Article of(String title, String content, String hashtag) {
-        return new Article(title, content, hashtag);
+    public static Ex01_1_Article_엔티티로_변경 of(String title, String content, String hashtag) {
+        return new Ex01_1_Article_엔티티로_변경(title, content, hashtag);
     }
     /* 정적 팩토리 메서드 (factory method pattern 중에 하나)
     * 정적 팩토리 메서드(이 코드에선 of 로 지정)란 객체 생성 역할을 하는 클래스 메서드 라는 뜻.
@@ -167,7 +148,7 @@ public class Article {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Article article = (Article) o;
+        Ex01_1_Article_엔티티로_변경 article = (Ex01_1_Article_엔티티로_변경) o;
         return id.equals(article.id);
 //        return (article.id).equals(id);
 //        return id != null && id.equals(article.id);
