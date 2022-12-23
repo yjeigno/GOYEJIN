@@ -1,7 +1,5 @@
 package com.bitstudy.app.domain;
 
-
-
 /* 할 일 : Lombok 사용하기
  *  주의 : maven 때랑 같은 방식인 것들도 이름이 다르게 되어 있으니 헷갈리지 않게 주의
  *
@@ -18,12 +16,37 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
+
+/** Article 과 ArticleComment 에 있는 공통 필드(메타데이터, ID 제외)들을 별도로 뺴서 관리할 거임
+ * 이유는 앞으로 Article 과 ArticleComment 처럼 fk 같은 걸로 엮여있는 테이블을 만들 경우, 모든 domain 안에 있는 파일들에 많은 중복 코드들이 들어가게 된다.
+ * 그래서 별도의 파일에 공통되는 것들을 다 몰아 넣고 사용하는 거 해 보기
+ *
+ * 참고: 공통 필드는 빼는 건 팀마다 다르다.
+ *      중복 코드를 싫어해서 그냥 한 파일에 몰아두는 사람들이 있고,
+ *      (유지보스)
+ *
+ *      중복 코드를 괜찮아 해서 각 파일에 그냥 두는 사람도 있다.
+ *      (각 파일에 모든 정보가 다 있다. 변경 시 유연하게 코드 작업을 할 수 있다.)
+ *
+ * 추출은 두 가지 방법으로 할 수 있다.
+ *  1) @Embedded - 공통되는 필드들을 하나의 클래스로 만들어서 @Embedded 있는 곳에서 치환하는 방식
+ *
+ *  2) @MappedSuperClass - (요즘 실무에서 사용)
+ *              @MappedSuperClass 어노테이션이 붙은 곳에서 사용
+ *
+ *  * 둘의 차이: 사실은 둘이 비슷하지만 @Embedded 방식을 하게 되면 필드가 하나 추가된다.
+ *              영속성 컨텍스트를 통해서 데이터를 넘겨 받아서 어플리케이션으로 열었을 때는 어차피 AuditingField 랑 똑같이 보인다.
+ *              (중간에 한 단계가 더 있다는 뜻)
+ *
+ *              @MappedSuperClass 는 표준 JPA 에서 제공해 주는 클래스. 중간 단계 따로 없이 바로 동작.
+ * */
 
 /** @Table - 엔티티와 매핑할 정보를 지정하고
 사용법 : @Index(name ="원하는 명칭", columnList = "사용할 테이블명")
@@ -33,7 +56,7 @@ name 부분을 생략하면 원래 이름 사용.
  사용법 : @Entity 와 세트로 사용
 
  */
-
+// @EntityListeners(AuditingEntityListener.class) /* 이거 없으면 테스트 할 때 createdAt 때문에 에러남(Ex04 관련)*/
 @Table(indexes = {
         @Index(columnList = "title"),  // 검색속도 빠르게 해주는 작업
         @Index(columnList = "hashtag"),
@@ -43,7 +66,7 @@ name 부분을 생략하면 원래 이름 사용.
 @Entity // Lombok 을 이용해서 클래스를 엔티티로 변경 @Entity 가 붙은 클래스는 JPA 가 관리하게 된다.
 @Getter // 모든 필드의 getter 들이 생성
 @ToString // 모든 필드의 toString 생성
-public class Article {
+public class Article extends AuditingFields {
 
     @Id // 전체 필드중에서 PK 표시 해주는 것 @Id 가 없으면 @Entity 어노테이션을 사용 못함
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 해당 필드가 auto_increment 인 경우 @GeneratedValue 를 써서 자동으로 값이 생성되게 해줘야 한다. (기본키 전략)
@@ -78,22 +101,22 @@ public class Article {
     @ToString.Exclude
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
-    //메타데이터
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createAt; // 생성일자
-
-    @CreatedBy
-    @Column(nullable = false,length = 100)
-    private String createBy; // 생성자
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt; // 수정일자
-
-    @LastModifiedBy
-    @Column(nullable = false,length = 100)
-    private String modifiedBy; // 수정자
+//    //메타데이터
+//    @CreatedDate
+//    @Column(nullable = false)
+//    private LocalDateTime createAt; // 생성일자
+//
+//    @CreatedBy
+//    @Column(nullable = false,length = 100)
+//    private String createBy; // 생성자
+//
+//    @LastModifiedDate
+//    @Column(nullable = false)
+//    private LocalDateTime modifiedAt; // 수정일자
+//
+//    @LastModifiedBy
+//    @Column(nullable = false,length = 100)
+//    private String modifiedBy; // 수정자
     protected Article() {}
 
     private Article(String title, String content, String hashtag) {
