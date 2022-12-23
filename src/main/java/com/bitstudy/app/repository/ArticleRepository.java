@@ -2,10 +2,12 @@ package com.bitstudy.app.repository;
 
 import com.bitstudy.app.domain.Article;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-/** TDD를 위해서 임시로 만들어 놓은 저장소 (이거로 DB에 접근할 거)
+/** 할 일 - 클래스 위에 @RepositoryRestResource 넣어서 해당 클래스를 spring rest data 사용할 준비시켜 주기
  *
- *
- */
+ * */
+
+@RepositoryRestResource
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 }
