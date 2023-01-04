@@ -42,3 +42,6 @@ spring:
     rest:
       base-path: /api # 우리가 엑셀에서 설계한 루트 url 보면 /api 로 되어있다, 그거 쓰면 됨.
       detection-strategy: annotated
+
+  thymeleaf3:
+    decoupled-logic: true
