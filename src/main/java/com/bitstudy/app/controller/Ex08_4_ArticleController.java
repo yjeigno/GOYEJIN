@@ -1,14 +1,11 @@
 package com.bitstudy.app.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
-
-import static java.util.List.of;
 
 /** 뷰 엔드포인트 관련 컨드롤러
  *
@@ -21,7 +18,7 @@ import static java.util.List.of;
 
 @Controller
 @RequestMapping("/articles") // 모든 경로들은 /articles 로 시작하니까 클래스 레벨이 1자로 @RequestMapping("/articles") 걸어 놨음
-public class ArticleController {
+public class Ex08_4_ArticleController {
 
     @GetMapping
     public String articles(ModelMap map) {
