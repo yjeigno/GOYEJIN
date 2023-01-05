@@ -1,7 +1,6 @@
 package com.bitstudy.app.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-import static java.util.List.of;
 
 /** 뷰 엔드포인트 관련 컨드롤러
  *
