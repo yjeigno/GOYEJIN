@@ -9,18 +9,19 @@
   <meta charset="UTF-8">
   <title>게시판 페이지</title>
 
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
-  <!-- 헤더/푸터 관련 -->
+  <!-- 헤더 푸터 관련-->
   <link rel="stylesheet" href="/css/h_f.css">
 
-  <!--본문 관련 -->
+  <!-- 본문 관련-->
   <link rel="stylesheet" href="/css/detail.css">
 
-  <!-- -->
 </head>
 <body>
-  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+<!-- 부트스트랩에서 제공하는 로고(헤더)나 sns 아이콘들(푸터)-->
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="bootstrap" viewBox="0 0 118 94">
     <title>Bootstrap</title>
     <path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z"></path>
@@ -35,73 +36,85 @@
     <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
   </symbol>
 </svg>
+
   <header id="header"></header>
 
   <main id="article-main" class="container">
-    <h1>1번글</h1>
+    <header class="py-5 text-center">
+      <h2>1번글</h2>
+    </header>
+
+
     <div class="row g-5">
-      <!-- aside -->
+      <!-- aside-->
       <aside class="col-md-5 col-lg-4 order-md-last">
-        <h4 class="d-flex justify-content-between align-items-center mb-3"><span>작성자</span></h4>
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-primary">작성자</span>
+        </h4>
         <ul class="list-group mb-3">
           <li class="list-group-item d-flex justify-content-between lh-sm">
-            <h6 class="my-0">
-              <p><span id="nickname">bitstudy</span></p>
-            </h6>
+            <div>
+              <h6 class="my-0"><span id="nickname">bitstudy</span></h6>
+            </div>
           </li>
           <li class="list-group-item d-flex justify-content-between lh-sm">
-            <h6 class="my-0">
-              <p><a href="mailto:bitstudy@email.com" id="email">bitstudy@email.com</a></p>
-            </h6>
+            <div>
+              <h6 class="my-0"><a href="mailto:bitstudy@email.com" id="email">bitstudy@email.com</a></h6>
+            </div>
           </li>
           <li class="list-group-item d-flex justify-content-between lh-sm">
-            <h6 class="my-0">
-              <p><time id="created-at">2023-01-06</time></p>
-            </h6>
+            <div>
+              <h6 class="my-0"><time id="created-at">2023-01-06</time></h6>
+            </div>
           </li>
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <h6 class="my-0">
-              <p><span id="hashtag">#스프링게시판</span></p>
-            </h6>
+          <li class="list-group-item d-flex justify-content-between bg-light">
+            <div class="text-success">
+              <h6 class="my-0"><span id="hashtag">#스프링게시판</span></h6>
+            </div>
           </li>
         </ul>
       </aside>
 
-      <!-- 게시글 -->
-      <div class="col-md-7 col-lg-8" id="content-body">
+      <!-- 게시글-->
+      <div class="col-md-7 col-lg-8" id="content_body">
         <p>본문</p>
       </div>
 
     </div>
 
+
       <!-- 댓글 -->
-      <div class="row g-5">
-        <section>
-          <form class="row g-3">
-            <div class="col-8">
-              <label for="comment-textarea" hidden>댓글</label>
-              <textarea class="form-control" id="comment-textarea" placeholder="댓글을 입력하시오." rows="5"></textarea>
-            </div>
-            <div class="col-auto" >
-              <label for="comment-submit" hidden>댓글 쓰기</label>
-              <button type="submit" class="btn btn-primary" id="comment-submit">쓰기</button>
-            </div>
-          </form>
+    <div class="row g-5">
+      <section>
+        <form class="row g-3">
+          <div class="col-8">
+            <label for="comment-txtarea" hidden>댓글</label>
+            <textarea class="form-control" id="comment-txtarea" placeholder="댓글을 입력하시오" rows="5"></textarea>
+          </div>
+          <div class="col-auto">
+            <label for="comment-submit" hidden>댓글 쓰기</label>
+            <button type="submit" class="btn btn-primary" id="comment-submit">쓰기</button>
+          </div>
+        </form>
 
-          <ul>
-            <li>
-              <strong>kh정보교육원</strong>
-              <time>2023-01-06</time>
-              <p>배고프다 초밥이 먹고싶다 우동도 먹구싶다. <br />헝그리 ㅋ</p>
-            </li>
-            <li>
-              <strong>yejin1234</strong>
-              <time>2023-01-06</time>
-              <p>배고프다 초밥이 먹고싶다 우동도 먹구싶다. <br /> 헝그리 ㅋ</p>
-            </li>
-          </ul>
-        </section>
+        <ul>
+          <li>
+            <strong>kh정보교육원</strong>
+            <time>2023-01-06</time>
+            <p>댓글인데 뭐라고 해야될지 모르겠다. 어제 한 dto 너무 어렵다. <br>
+              집에 가고싶다.</p>
+          </li>
 
+          <li>
+            <strong>goodjob0412</strong>
+            <time>2023-01-06</time>
+            <p>댓글인데 뭐라고 해야될지 모르겠다. 어제 한 dto 너무 어렵다. <br>
+              집에 가고싶다.</p>
+          </li>
+
+        </ul>
+
+      </section>
 
     </div>
 
@@ -109,16 +122,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-    <!-- //////////////////////////////////////////////////////////////////////////////////// -->
+<!--    ////////////////////////////////////////////////////////////////-->
     <!--<header> 1번글 </header>
 
     <aside>
