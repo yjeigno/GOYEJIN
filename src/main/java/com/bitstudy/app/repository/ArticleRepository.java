@@ -39,17 +39,17 @@ public interface ArticleRepository extends
         bindings.excludeUnlistedProperties(true);
 
         /* 2. 검색용(원하는) 필드를 지정(추가) 하는 부분
-        *   including 을 이용해서 title, content, createBy, createAt, hashtag 검색 가능하게 만들 거임
+        *   including 을 이용해서 title, content, createdBy, createdAt, hashtag 검색 가능하게 만들 거임
         *   id 는 인증기능 달아서 유저 정보를 알아볼 수 있을 때 할 거임
         *   including 사용법: 'root.필드명' */
-        bindings.including(root.title, root.content, root.createAt, root.createBy, root.hashtag);
+        bindings.including(root.title, root.content, root.createdAt, root.createdBy, root.hashtag);
 
         /* 3. '정확한 검색'만 했었는데 'or 검색' 가능하게 바꾸기 */
         // bindings.bind().first(StringExpression::likeIgnoreCase); // like '${문자열}' 로 들어감. % 없이 들어가는 거라 수동으로 넣어 줘야 함.
         bindings.bind(root.title).first(StringExpression::containsIgnoreCase); // like '%${문자열}%'
         bindings.bind(root.content).first(StringExpression::containsIgnoreCase);
-        bindings.bind(root.createAt).first(DateTimeExpression::eq); // 이건 날짜니까 DateTimeExpression 으로 하고, eq 는 equals 의 의미. 날짜 필드는 정확한 검색만 되도록 설정. 근데 이렇게 하면 시분초가 다 0으로 인식됨.
-        bindings.bind(root.createBy).first(StringExpression::containsIgnoreCase);
+        bindings.bind(root.createdAt).first(DateTimeExpression::eq); // 이건 날짜니까 DateTimeExpression 으로 하고, eq 는 equals 의 의미. 날짜 필드는 정확한 검색만 되도록 설정. 근데 이렇게 하면 시분초가 다 0으로 인식됨.
+        bindings.bind(root.createdBy).first(StringExpression::containsIgnoreCase);
         bindings.bind(root.hashtag).first(StringExpression::containsIgnoreCase);
     }
 }

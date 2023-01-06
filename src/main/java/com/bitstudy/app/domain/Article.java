@@ -60,17 +60,23 @@ name 부분을 생략하면 원래 이름 사용.
 @Table(indexes = {
         @Index(columnList = "title"),  // 검색속도 빠르게 해주는 작업
         @Index(columnList = "hashtag"),
-        @Index(columnList = "createAt"),
-        @Index(columnList = "createBy")
+        @Index(columnList = "createdAt"),
+        @Index(columnList = "createdBy")
 })
 @Entity // Lombok 을 이용해서 클래스를 엔티티로 변경 @Entity 가 붙은 클래스는 JPA 가 관리하게 된다.
 @Getter // 모든 필드의 getter 들이 생성
-@ToString // 모든 필드의 toString 생성
+@ToString(callSuper = true) // 모든 필드의 toString 생성
+                            // 상위(UserAccount)에 있는 toString 까지 출력할 수 있도록 callSuper 넣음
 public class Article extends AuditingFields {
 
     @Id // 전체 필드중에서 PK 표시 해주는 것 @Id 가 없으면 @Entity 어노테이션을 사용 못함
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 해당 필드가 auto_increment 인 경우 @GeneratedValue 를 써서 자동으로 값이 생성되게 해줘야 한다. (기본키 전략)
     private long id; // 게시글 고유 아이디
+
+    /* 새로 추가 */
+    @Setter
+    @ManyToOne(optional = false) // 단방향
+    private UserAccount userAccount;
 
     /*
       @Setter 도 @Getter 처럼 클래스 단위로 걸 수 있는데, 그렇게 하면 모든 필드에 접근이 가능해진다.
@@ -96,37 +102,23 @@ public class Article extends AuditingFields {
     @Setter
     private String hashtag; // 해시태그
 
-    @OrderBy("id")
+  // @OrderBy("id")
+    @OrderBy("createdAt desc") // 댓글 리스트를 최근 시간 걸로 정렬되도록 바꿈
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     @ToString.Exclude
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
-//    //메타데이터
-//    @CreatedDate
-//    @Column(nullable = false)
-//    private LocalDateTime createAt; // 생성일자
-//
-//    @CreatedBy
-//    @Column(nullable = false,length = 100)
-//    private String createBy; // 생성자
-//
-//    @LastModifiedDate
-//    @Column(nullable = false)
-//    private LocalDateTime modifiedAt; // 수정일자
-//
-//    @LastModifiedBy
-//    @Column(nullable = false,length = 100)
-//    private String modifiedBy; // 수정자
     protected Article() {}
 
-    private Article(String title, String content, String hashtag) {
+    private Article(UserAccount userAccount, String title, String content, String hashtag) {
+        this.userAccount = userAccount;
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
     }
 
-    public static Article of(String title, String content, String hashtag){
-        return new Article(title,content,hashtag);
+    public static Article of(UserAccount userAccount, String title, String content, String hashtag){
+        return new Article(userAccount, title, content, hashtag);
     }
 
     @Override
