@@ -61,6 +61,8 @@ public class ArticleController {
         map.addAttribute("article", article);
         map.addAttribute("articleComments", article.articleCommentsResponse());
         // article.articleCommentsResponse() 해설: 현재 article에 ArticleCommentsResponse 의 정보가 담겨있으니까 article 안에 있는 articleComments를 꺼내면 된다.
+       map.addAttribute("totalCount", articleService.getArticleCount());
         return "articles/detail";
     }
+
 }
