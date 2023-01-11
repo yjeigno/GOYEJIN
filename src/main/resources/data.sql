@@ -103,7 +103,7 @@ insert into article (user_account_id, title, content, hashtag, created_at, creat
 insert into article (user_account_id, title, content, hashtag, created_at, created_by, modified_at, modified_by) values (1, 'Praesent lectus.', 'Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.', 'Orange', '2022-10-19 03:32:42', 'Kaja', '2022-10-04 06:49:10', 'Tony');
 insert into article (user_account_id, title, content, hashtag, created_at, created_by, modified_at, modified_by) values (1, 'Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo.', 'Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.', 'Pink', '2022-09-25 12:45:23', 'Ximenez', '2022-04-11 09:26:21', 'Julissa');
 insert into article (user_account_id, title, content, hashtag, created_at, created_by, modified_at, modified_by) values (1, 'Vivamus vestibulum sagittis sapien.', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.', 'Green', '2022-10-24 20:32:30', 'Antonia', '2022-05-15 08:28:23', 'Thorvald');
-   
+
 ----------------------------------------------------------------
 ----------------------------------------------------------------
 ----------------------------------------------------------------
