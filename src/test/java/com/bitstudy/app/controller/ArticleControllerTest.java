@@ -71,16 +71,23 @@ class ArticleControllerTest {
     public void articlesOne() throws Exception {
 
         Long articleId = 1L;
+
+/*새거*/ long totalCount = 1L;
+
         given(articleService.getArticle(articleId)).willReturn(createArticleWithCommentsDto());
+
+        /* 새거 */ given(articleService.getArticleCount()).willReturn(totalCount);
 
         mvc.perform(get("/articles/1")) /** 테스트니까 그냥 1번 글 가져와라 할거임 */
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
-                .andExpect(model().attributeExists("articleComments"));
+                .andExpect(model().attributeExists("articleComments"))
+                .andExpect(model().attributeExists("totalCount"));
 
         then(articleService).should().getArticle(articleId);
+        then(articleService).should().getArticleCount();
     }
 
 //    /**3) 게시판 검색 전용*/

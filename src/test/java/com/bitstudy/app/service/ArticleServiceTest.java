@@ -105,7 +105,7 @@ class ArticleServiceTest {
         then(articleRepository).should().findById(articleId);
     }
 
-    /* 3. 게시글 생성 이동 */
+    /* 3. 게시글 생성 */
     @DisplayName("게시글 정보 입력하면, 게시글(하나) 생성한다.")
     @Test
     void givenGetArticleInfoWhenCreateArticleOne() {
@@ -158,7 +158,23 @@ class ArticleServiceTest {
         then(articleRepository).should().deleteById(articleId);
     }
 
+    /* 새로 추가 */
+    @DisplayName("게시글 수 조회하면, 게시글 수 반환")
+    @Test
+    void givenNothing_thenReturnArticleCount() {
+        // Given
+        long expected = 0L;
+        given(articleRepository.count()).willReturn(expected);
 
+        // When
+        long actual = sut.getArticleCount();
+
+        //Then
+        assertThat(actual).isEqualTo(expected);
+        then(articleRepository).should().count();
+
+    }
+    ////////////////////////////////////////////////////////////////////////////////
     private UserAccount creatUserAccount() {
         return UserAccount.of(
                 "bitstudy",
