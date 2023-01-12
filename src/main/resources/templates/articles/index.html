@@ -1,7 +1,5 @@
-<!-- 타임리프의 deCoupled 로직 적용해보기.
- 여기 파일을 다 HTML 로만 구성
-    th:replace 들을 다 삭제
-    -->
+<!-- 할일: 게시판 정렬
+각 컬럼 타이클 클릭시 내림,올림 차순으로 변경-->
 
 <!DOCTYPE html>
 <html>
@@ -16,6 +14,10 @@
 
     <!-- 본문 >> 검색 관련-->
     <link rel="stylesheet" href="/css/search_bar.css">
+
+    <!-- 본문 메인 css-->
+    <link rel="stylesheet" href="/css/index.css">
+
 
 </head>
 <body>
@@ -81,10 +83,10 @@
         <table class="table" id="article-table">
             <thead>
                 <tr>
-                    <th>제목</th>
-                    <th>해시태그</th>
-                    <th>작성자</th>
-                    <th>작성일</th>
+                    <th class="title"><a>제목</a></th>
+                    <th class="hashtag"><a>해시태그</a></th>
+                    <th class="user-id"><a>작성자</a></th>
+                    <th class="created-at"><a>작성일</a></th>
                 </tr>
             </thead>
             <tbody>
