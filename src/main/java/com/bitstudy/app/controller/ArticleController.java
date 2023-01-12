@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+/* 할일: 제목, 본문, 이름 등으로 검색 되도록 한다. */
+
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/articles")
@@ -27,7 +29,6 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
-/*새로 생성 -  페이징 */
     private final PaginationService paginationService;
 
 
@@ -39,16 +40,15 @@ public class ArticleController {
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map) {
 
-//        map.addAttribute("articles", articleService.searchArticles(searchType,searchValue,pageable).map(ArticleResponse::from));
 
-
-/* 새거 */
         Page<ArticleResponse> articles = articleService.searchArticles(searchType,searchValue,pageable).map(ArticleResponse::from);
 
         List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
 
         map.addAttribute("articles", articles);
         map.addAttribute("paginationBarNumbers", barNumbers);
+        /* 추가*/map.addAttribute("searchTypes", SearchType.values());
+        /* values(): enum인 요소들을 배열로 넘겨준다 */
 
         return "articles/index";
     }
@@ -60,9 +60,7 @@ public class ArticleController {
 
         map.addAttribute("article", article);
         map.addAttribute("articleComments", article.articleCommentsResponse());
-        // article.articleCommentsResponse() 해설: 현재 article에 ArticleCommentsResponse 의 정보가 담겨있으니까 article 안에 있는 articleComments를 꺼내면 된다.
-       map.addAttribute("totalCount", articleService.getArticleCount());
+        map.addAttribute("totalCount", articleService.getArticleCount());
         return "articles/detail";
     }
-
 }

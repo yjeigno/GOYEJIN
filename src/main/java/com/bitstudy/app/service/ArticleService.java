@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 
 
-/** 기능 관련된 로직을 다 여기다가 짤거임.  */
+/** 게시판 페이지 페이지네이션 */
 @Slf4j
 @Service
 @RequiredArgsConstructor // 필수 필드에 대한 생성자를 자동으로 만들어주는 롬복 애너테이션
@@ -66,7 +66,7 @@ public class ArticleService {
             case CONTENT -> articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::from);
             case ID -> articleRepository.findByUserAccount_UserIdContaining(searchKeyword, pageable).map(ArticleDto::from);
             case NICKNAME -> articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
-            case HASHTAG -> articleRepository.findByHashtagContaining(searchKeyword, pageable).map(ArticleDto::from);
+            case HASHTAG -> articleRepository.findByhashtagContaining(searchKeyword, pageable).map(ArticleDto::from);
         };
 
     }
@@ -113,8 +113,18 @@ public class ArticleService {
         articleRepository.deleteById(articleId);
     }
 
-    /* 게시글 개수 구하기 */
+    /* 게시글 개수 구하기 - 마지막 글일때는 '다음' 버튼 비활성화 시켜야 하기 때문. */
     public long getArticleCount() {
         return articleRepository.count();
     }
 }
+
+
+
+
+
+
+
+
+
+

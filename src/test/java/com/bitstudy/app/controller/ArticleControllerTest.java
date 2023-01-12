@@ -1,10 +1,12 @@
 package com.bitstudy.app.controller;
 
 import com.bitstudy.app.config.SecurityConfig;
+import com.bitstudy.app.domain.type.SearchType;
 import com.bitstudy.app.dto.ArticleWithCommentsDto;
 import com.bitstudy.app.dto.UserAccountDto;
 import com.bitstudy.app.service.ArticleService;
 import com.bitstudy.app.service.PaginationService;
+import io.micrometer.core.instrument.search.Search;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,10 +50,8 @@ class ArticleControllerTest {
     @Test
     @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 정상호출")
     public void articlesAll() throws Exception {
-        /*  eq 는 equal 이라는 뜻  */
         given(articleService.searchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
 
-/* 새거 */
         given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0,1,2,3,4));
 
         mvc.perform(get("/articles"))
@@ -65,6 +65,37 @@ class ArticleControllerTest {
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
+    @Test
+    @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 검색어와 함께 호출")
+    public void givenSearchKeyword_thenReturnArticles() throws Exception {
+        // Given
+        SearchType searchType = SearchType.TITLE; /* 검색어가 있게 할건데 이번에는 제목으로만 테스트 할거임*/
+        String searchValue = "title"; /* 키워드*/
+
+        given(articleService.searchArticles(eq(searchType), eq(searchValue), any(Pageable.class))).willReturn(Page.empty());
+        given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(0,1,2,3,4));
+        /* 페이징이 어떻게 나오던 일단 상관없다. 단지 검색을 했을때 페이징 기능을 호출하긴 하는가만 보면 됨 */
+
+        // When & Then
+        mvc.perform(
+                get("/articles")
+                        .queryParam("searchType", searchType.name())
+                        .queryParam("searchValue", searchValue)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(view().name("articles/index"))
+                .andExpect(model().attributeExists("articles"))
+                .andExpect(model().attributeExists("searchTypes"));
+
+        then(articleService).should().searchArticles(eq(searchType), eq(searchValue), any(Pageable.class));
+        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
+
+    }
+
+
+
+
     /**2) 게시글 (상세) 페이지*/
     @Test
     @DisplayName("[view][GET] 게시글 상세 페이지 - 정상호출")
@@ -72,11 +103,11 @@ class ArticleControllerTest {
 
         Long articleId = 1L;
 
-/*새거*/ long totalCount = 1L;
+        long totalCount = 1L; /* Long은 null 가능, long은 불가*/
 
         given(articleService.getArticle(articleId)).willReturn(createArticleWithCommentsDto());
 
-        /* 새거 */ given(articleService.getArticleCount()).willReturn(totalCount);
+        given(articleService.getArticleCount()).willReturn(totalCount);
 
         mvc.perform(get("/articles/1")) /** 테스트니까 그냥 1번 글 가져와라 할거임 */
                 .andExpect(status().isOk())
@@ -84,11 +115,12 @@ class ArticleControllerTest {
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
                 .andExpect(model().attributeExists("articleComments"))
-                .andExpect(model().attributeExists("totalCount"));
+               .andExpect(model().attributeExists("totalCount"));
 
         then(articleService).should().getArticle(articleId);
         then(articleService).should().getArticleCount();
     }
+
 
 //    /**3) 게시판 검색 전용*/
 //    @Disabled("구현중")
@@ -101,16 +133,7 @@ class ArticleControllerTest {
 //                .andExpect(view().name("articles/search"));
 //    }
 //
-//    /**4) 해시태그 검색 전용 페이지*/
-//    @Disabled("구현중")
-//    @Test
-//    @DisplayName("[view][GET] 게시글 해시태그 전용 페이지 - 정상호출")
-//    public void articlesSearchHashtag() throws Exception {
-//        mvc.perform(get("/articles/search-hashtag"))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-//                .andExpect(view().name("articles/search-hashtag"));
-//    }
+
 
     ///////////////////////////////////////
     private ArticleWithCommentsDto createArticleWithCommentsDto() {
